@@ -1,47 +1,53 @@
-package org.wqz.Code;
+package MyCollections.FindSubtreeNodes;
 
+//说阿拉伯数字转成中文表达（比如 100050000->一亿零五万）
 public class ArabicToChinese {
     private static final String[] CN_NUM = {"零", "一", "二", "三", "四", "五", "六", "七", "八", "九"};
     private static final String[] CN_UNIT = {"", "十", "百", "千", "万", "十", "百", "千", "亿", "十", "百", "千"};
 
-    public static String arabicToChinese(int num) {
+    public static String arabicToChinese(long num) {
         if (num == 0) {
             return CN_NUM[0];
         }
 
-        StringBuilder sb = new StringBuilder();
+        StringBuilder result = new StringBuilder();
+        boolean zeroFlag = false;
         int unitIndex = 0;
-        boolean zero = false;
 
         while (num > 0) {
-            int digit = num % 10;
+            int digit = (int) (num % 10);
             if (digit == 0) {
-                if (!zero) {
-                    sb.insert(0, CN_NUM[0]);
-                    zero = true;
+                if (!zeroFlag) {
+                    result.insert(0, CN_NUM[0]);
+                    zeroFlag = true;
                 }
             } else {
-                if (zero) {
-                    sb.insert(0, CN_NUM[0]);
-                    zero = false;
+                if (zeroFlag) {
+                    result.insert(0, CN_NUM[0]);
+                    zeroFlag = false;
                 }
-                sb.insert(0, CN_UNIT[unitIndex]);
-                sb.insert(0, CN_NUM[digit]);
+                result.insert(0, CN_UNIT[unitIndex]);
+                result.insert(0, CN_NUM[digit]);
             }
             num /= 10;
             unitIndex++;
         }
 
-        // 处理特殊情况，如 10 直接输出 十，而不是 一十
-        if (sb.length() >= 2 && sb.substring(0, 2).equals("一十")) {
-            sb.delete(0, 1);
+        // 去除多余的零
+        while (result.indexOf("零") == result.length() - 1) {
+            result.deleteCharAt(result.length() - 1);
         }
 
-        return sb.toString();
+        // 处理一十的情况
+        if (result.length() >= 2 && result.substring(0, 2).equals("一十")) {
+            result.deleteCharAt(0);
+        }
+
+        return result.toString();
     }
 
     public static void main(String[] args) {
-        int num = 12040;
+        long num = 100050000;
         System.out.println(arabicToChinese(num));
     }
 }    
