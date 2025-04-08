@@ -62,7 +62,7 @@ public class BigNumberAddition {
 ```
 
 
-#### 题目简长的类型
+#### 题目较长的类型
 
 这部分的内容放在了每一个文件夹中。
 
